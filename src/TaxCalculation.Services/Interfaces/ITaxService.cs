@@ -9,7 +9,7 @@ namespace TaxCalculation.Services.Interfaces
 {
     public interface ITaxService
     {
-        Task<Rate> GetTaxRateByLocation(Location data);
+        Task<TaxRate> GetTaxRateByLocation(Location data);
         Task<Tax> CalculateTax(Order data);
     }
 }
