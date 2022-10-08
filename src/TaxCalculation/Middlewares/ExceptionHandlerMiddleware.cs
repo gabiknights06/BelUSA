@@ -86,7 +86,7 @@ namespace TaxCalculation.Middlewares
             {
                 context.Response.StatusCode = StatusCodes.Status502BadGateway;
 
-                errorResponse = ErrorResponse.BadGateway(context);
+                errorResponse = ErrorResponse.BadGateway(context, exception.Message);
 
                 Log.Error(exception, "BadGateway request {message} {innerException}", exception.Message, exception.InnerException);
             }
@@ -156,20 +156,13 @@ namespace TaxCalculation.Middlewares
             var traceId = Activity.Current?.RootId ?? context?.TraceIdentifier;
             return new ErrorResponse(errorCode, description, traceId);
         }
-        public static ErrorResponse BadGateway(HttpContext context)
+        public static ErrorResponse BadGateway(HttpContext context, string message)
         {
             string errorCode = "bad_gate_way";
-            string description = "An unhandled exception has occurred while executing the request.";
+            string description = message;
             var traceId = Activity.Current?.RootId ?? context?.TraceIdentifier;
             return new ErrorResponse(errorCode, description, traceId);
-        }
-        public static ErrorResponse BadGateway(HttpContext context, string service)
-        {
-            string errorCode = "bad_gate_way";
-            string description = $@"An unhandled exception has occurred while requesting in {service}.";
-            var traceId = Activity.Current?.RootId ?? context?.TraceIdentifier;
-            return new ErrorResponse(errorCode, description, traceId);
-        }      
+        } 
         public static ErrorResponse ValidationError(HttpContext context, string message)
         {
             string errorCode = "validation_error";
