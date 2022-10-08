@@ -19,10 +19,11 @@ namespace TaxCalculation.Services
             _strategyFactory = strategyFactory;
         }
 
-
         public async Task<Tax> CalculateTax(Order data)
         {
-            throw new NotImplementedException();
+            var factory = _strategyFactory.Create(data.TaxCalculatorOption.ToEnum<TaxCalculatorOption>());
+
+            return await factory.CalculateTax(data);
         }
 
         public async Task<TaxRate> GetTaxRateByLocation(Location data)
