@@ -3,6 +3,7 @@ using Newtonsoft.Json.Serialization;
 using Polly;
 using Polly.Retry;
 using RestSharp;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 using TaxCalculation.Core.Enumeration;
 using TaxCalculation.Core.Model;
 using TaxCalculation.Core.Strategy;
+using TaxCalculation.Persistent.Exceptions;
 using TaxCalculation.Persistent.Utilities;
 
 namespace TaxCalculation.Persistent.Calculator
@@ -127,14 +129,13 @@ namespace TaxCalculation.Persistent.Calculator
                     if (retryCount != maxRetry)
                     {
                         retryCount += 1;
-                        //  Log.Information("Request failed in {url}. Retry count: {retryCount}. Next Retry: {retryTime}", _cashPickUpUrl, retryCount, retryTime);
+                        Log.Error("Request failed in {url}. Retry count: {retryCount}. Next Retry: {retryTimeInterval} second/s", _tarJarBaseURL, retryCount, retryTimeInterval);
                         throw new HttpRequestException();
-
                     }
                     else
                     {
-                        //throw new CashPickUpResponseException(response.ErrorMessage, response.ErrorException);
-                        throw new HttpRequestException();
+                        var result = JsonConvert.DeserializeObject<TaxJarErrorResponseDTO>(response.Content);
+                        throw new BadGateWayException($@"{result.Status} {result.Error} - {result.Detail}", response.ErrorException);
                     }
                 }
             });
