@@ -45,52 +45,50 @@ namespace TaxCalculation.Persistent.Calculator
         public async Task<Tax> CalculateTax(Order data)
         {
             return await _retryPolicy.ExecuteAsync(async () =>
-            {
-            var client = new RestClient(_tarJarBaseURL);
-           // client.Timeout = -1;
-            var request = new RestRequest("/api/v1/transactions");
+             {
+                var client = new RestClient(_tarJarBaseURL);
+                var request = new RestRequest("/v2/taxes");
 
-            var serialize = JsonConvert.SerializeObject(data);
+                var serialize = JsonConvert.SerializeObject(data);
 
-            //Settings for Conversion of Object Property to SnakeCase
-            DefaultContractResolver contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            };
+                //Settings for Conversion of Object Property to SnakeCase
+                DefaultContractResolver contractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                };
 
-                /*    var serializeToSnakeCase = JsonConvert.SerializeObject(cashPickUp, new JsonSerializerSettings
-                   {
-                       ContractResolver = contractResolver,
-                       Formatting = Formatting.Indented
-                   });
-
-
-                   request.AddParameter("application/json", serializeToSnakeCase, ParameterType.RequestBody); */
-
+                var serializeToSnakeCase = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+                {
+                    ContractResolver = contractResolver,
+                    Formatting = Formatting.Indented
+                });              
 
                 request.AddHeader("Authorization", "Bearer " + _taxJarApiKey);
 
-                IRestResponse response = await client.ExecuteAsync(request, Method.GET);
+                request.AddParameter("application/json", serializeToSnakeCase, ParameterType.RequestBody);
+
+                IRestResponse response = await client.ExecuteAsync(request, Method.POST);
 
                 if (response.IsSuccessful)
                 {
-                    var result = JsonConvert.DeserializeObject<string>(response.Content);
+                    var result = JsonConvert.DeserializeObject<Tax>(response.Content);
 
-                    return new Tax();
+                    return result;
                 }
                 else
                 {
-                    if (retryCount != maxRetry)
+                     var result = JsonConvert.DeserializeObject<TaxJarErrorResponseDTO>(response.Content);
+
+                     if (retryCount != maxRetry)
                     {
                         retryCount += 1;
-                        //  Log.Information("Request failed in {url}. Retry count: {retryCount}. Next Retry: {retryTime}", _cashPickUpUrl, retryCount, retryTime);
-                        throw new HttpRequestException();
+                         Log.Error("Request failed in {url}. Retry count: {retryCount}. Next Retry: {retryTimeInterval} second/s. {status} - {error} {detail}", _tarJarBaseURL, retryCount, retryTimeInterval, result.Status, result.Error, result.Detail);
+                         throw new HttpRequestException();
 
-                    }
+                     }
                     else
                     {
-                        //throw new CashPickUpResponseException(response.ErrorMessage, response.ErrorException);
-                        throw new HttpRequestException();
+                        throw new BadGateWayException($@"{result.Status} {result.Error} - {result.Detail}", response.ErrorException);
                     }
                 }
             });
@@ -126,15 +124,16 @@ namespace TaxCalculation.Persistent.Calculator
                 }
                 else
                 {
+                    var result = JsonConvert.DeserializeObject<TaxJarErrorResponseDTO>(response.Content);
+
                     if (retryCount != maxRetry)
                     {
                         retryCount += 1;
-                        Log.Error("Request failed in {url}. Retry count: {retryCount}. Next Retry: {retryTimeInterval} second/s", _tarJarBaseURL, retryCount, retryTimeInterval);
+                        Log.Error("Request failed in {url}. Retry count: {retryCount}. Next Retry: {retryTimeInterval} second/s. {status} - {error} {detail}", _tarJarBaseURL, retryCount, retryTimeInterval, result.Status, result.Error, result.Detail);
                         throw new HttpRequestException();
                     }
                     else
                     {
-                        var result = JsonConvert.DeserializeObject<TaxJarErrorResponseDTO>(response.Content);
                         throw new BadGateWayException($@"{result.Status} {result.Error} - {result.Detail}", response.ErrorException);
                     }
                 }
