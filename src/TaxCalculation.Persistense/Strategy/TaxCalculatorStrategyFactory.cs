@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TaxCalculation.Core.Enumeration;
 using TaxCalculation.Core.Model;
 using TaxCalculation.Core.Strategy;
+using TaxCalculation.Persistent.Exceptions;
 
 namespace TaxCalculation.Persistent.Strategy
 {
@@ -29,7 +30,7 @@ namespace TaxCalculation.Persistent.Strategy
                 }
             }
 
-            throw new ArgumentNullException();
+            throw new BadRequestException("Calc option not found.");
         }
 
     }
