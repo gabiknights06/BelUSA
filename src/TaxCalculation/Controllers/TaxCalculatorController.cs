@@ -41,10 +41,10 @@ namespace TaxCalculation.Controllers
         /// Get the tax rates for a location by zip. Conditional filter - country, Optional filter - state, city, street.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("tax-rate/{zip}")]
-        public async Task<IActionResult> GetTaxRate([FromRoute] string zip, [FromQuery] string? country, [FromQuery] string? state, [FromQuery] string? city, [FromQuery] string? street)
+        [HttpGet("calc-option/{calcOption}/tax-rate/{zip}")]
+        public async Task<IActionResult> GetTaxRate([FromRoute] string calcOption, [FromRoute] string zip, [FromQuery] string? country, [FromQuery] string? state, [FromQuery] string? city, [FromQuery] string? street)
         {
-            var location = new Location { Zip = zip, Country = country, State = state, City = city, Street = street };
+            var location = new Location { Zip = zip, Country = country, State = state, City = city, Street = street, TaxCalculatorOption = calcOption };
 
             var result = await _service.GetTaxRateByLocation(location);
 

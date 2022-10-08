@@ -25,6 +25,7 @@ using TaxCalculation.Services.Interfaces;
 using TaxCalculation.Versioning;
 using TaxCalculation.Middlewares;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace TaxCalculation
 {
@@ -42,7 +43,6 @@ namespace TaxCalculation
         {
 
             #region Swagger
-
             services.AddApiVersioning(
                 options =>
                 {
@@ -60,13 +60,40 @@ namespace TaxCalculation
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.OperationFilter<SwaggerDefaultValues>();
+                   // options.OperationFilter<SwaggerDefaultValues>();
                     // Set the comments path for the Swagger JSON and UI.
                     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                     options.IncludeXmlComments(xmlPath);
+                 //   options.ExampleFilters(); // for Swagger documentation default value example - REQUEST
+
+                    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = "Please enter your Bearer Token.",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer"
+                    });
+
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                },
+                            },
+                            new string[]{ }
+                        }
+                    });
                 });
 
+            services.AddSwaggerGenNewtonsoftSupport();
+            //services.AddSwaggerExamplesFromAssemblyOf<SwaggerRequestExampleValue>(); // for Swagger documentation default value example - REQUEST
             #endregion
 
             //Get API Connection Details in environment variables and store it in static variable
@@ -129,8 +156,6 @@ namespace TaxCalculation
 
                 #endregion
             }
-
-
 
             app.UseRouting();
 

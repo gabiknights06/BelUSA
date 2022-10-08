@@ -11,7 +11,7 @@
             <param name="order">Details of the order.</param>
             <returns></returns>
         </member>
-        <member name="M:TaxCalculation.Controllers.TaxCalculatorController.GetTaxRate(System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:TaxCalculation.Controllers.TaxCalculatorController.GetTaxRate(System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Get the tax rates for a location by zip. Conditional filter - country, Optional filter - state, city, street.
             </summary>
