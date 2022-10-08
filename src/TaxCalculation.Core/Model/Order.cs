@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,9 @@ namespace TaxCalculation.Core.Model
         public float Shipping { get; set; }
         public List<NexusAddresses> NexusAddresses { get; set; }
         public List<LineItems> LineItems { get; set; }
-        public TaxCalculatorOption TaxCalculatorOption { get; set; }
+
+        [JsonIgnore]
+        public string TaxCalculatorOption { get; set; }
     }
 
     public class LineItems
