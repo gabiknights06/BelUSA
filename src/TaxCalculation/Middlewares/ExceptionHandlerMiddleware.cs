@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -73,13 +74,13 @@ namespace TaxCalculation.Middlewares
         {
             ErrorResponse errorResponse = null;
                        
-            if (exception is ValidatorException)
+            if (exception is TaxValidatorException)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
                 errorResponse = ErrorResponse.ValidationError(context, exception.Message);
 
-             //   Log.Error(exception, "One or more validation errors occured {message} {innerException}", exception.Message, exception.InnerException);
+                Log.Error(exception, "One or more validation errors occured {message} {innerException}", exception.Message, exception.InnerException);
             }
             else if (exception is BadGateWayException)
             {
@@ -87,7 +88,7 @@ namespace TaxCalculation.Middlewares
 
                 errorResponse = ErrorResponse.BadGateway(context);
 
-               // Log.Error(exception, "BadGateway request {message} {innerException}", exception.Message, exception.InnerException);
+                Log.Error(exception, "BadGateway request {message} {innerException}", exception.Message, exception.InnerException);
             }
 
             else if (exception is BadRequestException)
@@ -103,7 +104,7 @@ namespace TaxCalculation.Middlewares
                     errorResponse = ErrorResponse.BadRequestError(context);
                 }
 
-              //  Log.Error(exception, "Bad request occured {message} {innerException}", exception.Message, exception.InnerException);
+                Log.Error(exception, "Bad request occured {message} {innerException}", exception.Message, exception.InnerException);
             }
 
             else if (exception is Exception)
@@ -111,7 +112,7 @@ namespace TaxCalculation.Middlewares
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 errorResponse = ErrorResponse.InternalServerError(context);
 
-              //  Log.Error(exception, "Exception occured {message} {innerException}", exception.Message, exception.InnerException);
+                Log.Error(exception, "Exception occured {message} {innerException}", exception.Message, exception.InnerException);
             }
 
             context.Response.ContentType = "application/problem+json";

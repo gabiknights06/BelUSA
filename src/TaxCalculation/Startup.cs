@@ -23,6 +23,8 @@ using TaxCalculation.Persistent.Utilities;
 using TaxCalculation.Services;
 using TaxCalculation.Services.Interfaces;
 using TaxCalculation.Versioning;
+using TaxCalculation.Middlewares;
+using Serilog;
 
 namespace TaxCalculation
 {
@@ -96,8 +98,19 @@ namespace TaxCalculation
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddSerilog();
+
+            #region Middleware
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+            #endregion
+
+            var pathBase = "/bel-usa";
+            app.UsePathBase(pathBase);
+
             if (env.IsDevelopment())
             {
                 #region swagger
@@ -109,12 +122,15 @@ namespace TaxCalculation
                     // build a swagger endpoint for each discovered API version
                     foreach (var description in provider.ApiVersionDescriptions)
                         {
-                            options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                            options.SwaggerEndpoint($"{pathBase}/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
                         }
+                        options.RoutePrefix = "";
                     });
 
                 #endregion
             }
+
+
 
             app.UseRouting();
 
