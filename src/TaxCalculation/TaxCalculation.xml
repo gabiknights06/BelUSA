@@ -4,7 +4,7 @@
         <name>TaxCalculation</name>
     </assembly>
     <members>
-        <member name="M:TaxCalculation.Controllers.TaxCalculatorController.CalculateTaxes(TaxCalculation.Core.Model.Order)">
+        <member name="M:TaxCalculation.Controllers.TaxCalculatorController.CalculateTaxes(TaxCalculation.Core.Model.Order,System.String)">
             <summary>
             Calculate the taxes for an order.
             </summary>

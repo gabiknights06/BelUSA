@@ -28,12 +28,14 @@ namespace TaxCalculation.Controllers
         /// </summary>
         /// <param name="order">Details of the order.</param>
         /// <returns></returns>
-        [HttpPost("calculate")]
-        public async Task<IActionResult> CalculateTaxes([FromBody] Order order)
+        [HttpPost("calc-option/{calcOption}/calculate")]
+        public async Task<IActionResult> CalculateTaxes([FromBody] Order order, [FromRoute] string calcOption)
         {
-            
+            order.TaxCalculatorOption = calcOption;
 
-            return Ok();
+            var result = await _service.CalculateTax(order);
+
+            return Ok(result);
         }
 
 
