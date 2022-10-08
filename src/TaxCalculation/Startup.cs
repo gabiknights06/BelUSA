@@ -41,7 +41,6 @@ namespace TaxCalculation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             #region Swagger
             services.AddApiVersioning(
                 options =>
@@ -100,7 +99,6 @@ namespace TaxCalculation
             APIConnectionDetails.TaxJarBaseURL = Environment.GetEnvironmentVariable("TAX_JAR_BASE_URL");
             APIConnectionDetails.TaxJarAPIKey = Environment.GetEnvironmentVariable("TAX_JAR_API_KEY");
 
-
             //Dependency Injection
             services.AddScoped<ITaxService, TaxService>();
 
@@ -119,7 +117,6 @@ namespace TaxCalculation
                });
             #endregion
 
-
            // services.AddControllers();
     
         }
@@ -128,13 +125,7 @@ namespace TaxCalculation
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddSerilog();
-
-            #region Middleware
-
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
-
-            #endregion
-
+   
             var pathBase = "/bel-usa";
             app.UsePathBase(pathBase);
 
@@ -160,6 +151,14 @@ namespace TaxCalculation
             app.UseRouting();
 
             app.UseAuthorization();
+
+            #region Middleware
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+            app.UseMiddleware<BasicAuthMiddleware>();
+
+            #endregion
 
             app.UseEndpoints(endpoints =>
             {
