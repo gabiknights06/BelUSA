@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaxCalculation.Core\TaxCalculation.Core.csproj" />
+    <ProjectReference Include="..\TaxCalculation.Persistense\TaxCalculation.Persistent.csproj" />
   </ItemGroup>
 
 </Project>

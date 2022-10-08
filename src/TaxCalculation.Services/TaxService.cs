@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaxCalculation.Core.Enumeration;
 using TaxCalculation.Core.Model;
 using TaxCalculation.Core.Strategy;
+using TaxCalculation.Services.Extensions;
 using TaxCalculation.Services.Interfaces;
 
 namespace TaxCalculation.Services
@@ -25,9 +27,7 @@ namespace TaxCalculation.Services
 
         public async Task<TaxRate> GetTaxRateByLocation(Location data)
         {
-
-            var factory = _strategyFactory.Create(data.TaxCalculatorOption);
-
+            var factory = _strategyFactory.Create(data.TaxCalculatorOption.ToEnum<TaxCalculatorOption>());
 
            return await factory.GetTaxRateByLocation(data);
         }
