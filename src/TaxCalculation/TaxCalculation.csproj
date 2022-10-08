@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaxCalculation.Core\TaxCalculation.Core.csproj" />
+    <ProjectReference Include="..\TaxCalculation.Persistense\TaxCalculation.Persistent.csproj" />
+    <ProjectReference Include="..\TaxCalculation.Services\TaxCalculation.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,6 +15,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using TaxCalculation.Core.Strategy;
+using TaxCalculation.Persistent.Calculator;
+using TaxCalculation.Persistent.Strategy;
+using TaxCalculation.Persistent.Utilities;
+using TaxCalculation.Services;
+using TaxCalculation.Services.Interfaces;
 using TaxCalculation.Versioning;
 
 namespace TaxCalculation
@@ -59,6 +65,21 @@ namespace TaxCalculation
                 });
 
             #endregion
+
+            //Get API Connection Details in environment variables and store it in static variable
+            APIConnectionDetails.TaxJarBaseURL = Environment.GetEnvironmentVariable("TAX_JAR_BASE_URL");
+            APIConnectionDetails.TaxJarAPIKey = Environment.GetEnvironmentVariable("TAX_JAR_API_KEY");
+
+
+            //Dependency Injection
+            services.AddScoped<ITaxService, TaxService>();
+
+            //DI for Strategy Pattern
+            services.AddScoped<ITaxCalculatorStrategyFactory, TaxCalculatorStrategyFactory>();
+            services.AddScoped<ITaxCalculatorStrategy, TaxJar>();
+
+
+
 
             services.AddControllers();
     
