@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,10 +79,19 @@ namespace TaxCalculation
             services.AddScoped<ITaxCalculatorStrategyFactory, TaxCalculatorStrategyFactory>();
             services.AddScoped<ITaxCalculatorStrategy, TaxJar>();
 
+            #region Naming Policy
+            services.AddControllers()
+               .AddNewtonsoftJson(setup =>
+               {
+                   setup.SerializerSettings.ContractResolver = new DefaultContractResolver()
+                   {
+                       NamingStrategy = new SnakeCaseNamingStrategy()
+                   };
+               });
+            #endregion
 
 
-
-            services.AddControllers();
+           // services.AddControllers();
     
         }
 
