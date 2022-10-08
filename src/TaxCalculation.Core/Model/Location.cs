@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaxCalculation.Core.Enumeration;
 
 namespace TaxCalculation.Core.Model
 {
@@ -13,5 +14,6 @@ namespace TaxCalculation.Core.Model
         public string State { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
+        public TaxCalculatorOption TaxCalculatorOption { get; set; }
     }
 }

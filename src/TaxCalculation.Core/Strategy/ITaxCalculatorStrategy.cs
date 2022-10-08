@@ -11,7 +11,7 @@ namespace TaxCalculation.Core.Strategy
     public interface ITaxCalculatorStrategy
     {
         bool IsApplicable(TaxCalculatorOption option);
-        Task<Rate> GetTaxRateByLocation(Location data);
+        Task<TaxRate> GetTaxRateByLocation(Location data);
         Task<Tax> CalculateTax(Order data);
     }
 }

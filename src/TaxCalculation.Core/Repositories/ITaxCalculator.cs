@@ -9,7 +9,7 @@ namespace TaxCalculation.Core.Repositories
 {
     public interface ITaxCalculator
     {
-        Rate GetTaxRateByLocation(Location data);
+        RateDetails GetTaxRateByLocation(Location data);
 
 
     }

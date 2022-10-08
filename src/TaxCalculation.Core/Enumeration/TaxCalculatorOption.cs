@@ -8,8 +8,8 @@ namespace TaxCalculation.Core.Enumeration
 {
     public enum TaxCalculatorOption
     {
-        Tax_Jar = 1,
-        Other1 = 2,
-        Other2 = 3
+        Tax_Jar = 0,
+        Other1 = 1,
+        Other2 = 2
     }
 }
