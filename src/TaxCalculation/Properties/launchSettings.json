@@ -1,0 +1,41 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:26624",
+      "sslPort": 0
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "bel-usa",
+      "environmentVariables": {
+        "TAX_JAR_API_KEY": "5da2f821eee4035db4771edab942a4cc",
+        "TAX_JAR_BASE_URL": "https://api.taxjar.com",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "TaxCalculation": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "bel-usa",
+      "environmentVariables": {
+        "TAX_JAR_API_KEY": "5da2f821eee4035db4771edab942a4cc",
+        "TAX_JAR_BASE_URL": "https://api.taxjar.com",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": "true",
+      "applicationUrl": "http://localhost:5000"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/bel-usa",
+      "publishAllPorts": true
+    }
+  }
+}
