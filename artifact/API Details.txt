@@ -1,0 +1,54 @@
+API Key : 5da2f821eee4035db4771edab942a4cc
+
+=========================================================================================
+
+curl of POST method
+
+curl -X 'POST' \
+  'http://localhost:26624/bel-usa/api/v1/tax-calculator/calc-option/tax_jar/calculate' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer 5da2f821eee4035db4771edab942a4cc' \
+  -H 'Content-Type: application/json-patch+json' \
+  -d '{
+  "from_country": "US",
+  "from_zip": "92093",
+  "from_state": "CA",
+  "from_city": "La Jolla",
+  "from_street": "9500 Gilman Drive",
+  "to_country": "US",
+  "to_zip": "90002",
+  "to_state": "CA",
+  "to_city": "Los Angeles",
+  "to_street": "1335 E 103rd St",
+  "amount": 15,
+  "shipping": 1.5,
+  "nexus_addresses": [
+    {
+      "id": "Main Location",
+      "country": "US",
+      "zip": "92093",
+      "state": "CA",
+      "city": "La Jolla",
+      "street": "9500 Gilman Drive"
+    }
+  ],
+  "line_items": [
+    {
+      "id": "1",
+      "quantity": 1,
+      "product_tax_code": "20010",
+      "unit_price": 15,
+      "discount": 0
+    }
+  ]
+}'
+
+
+===============================================================================
+
+curl of GET method
+
+curl -X 'GET' \
+  'http://localhost:26624/bel-usa/api/v1/tax-calculator/calc-option/tax_jar/tax-rate/05495-2086?country=US&state=VT&city=Williston&street=312%20Hurricane%20Lane' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer 5da2f821eee4035db4771edab942a4cc'
