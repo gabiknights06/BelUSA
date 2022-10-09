@@ -26,6 +26,7 @@ namespace TaxCalculation.Controllers
         /// <summary>
         /// Calculate the taxes for an order.
         /// </summary>
+        /// <param name="calcOption" example="tax_jar">Calculator type used in computation.</param>
         /// <param name="order">Details of the order.</param>
         /// <returns></returns>
         [HttpPost("calc-option/{calcOption}/calculate")]
@@ -42,6 +43,12 @@ namespace TaxCalculation.Controllers
         /// <summary>
         /// Get the tax rates for a location by zip. Conditional filter - country, Optional filter - state, city, street.
         /// </summary>
+        /// <param name="calcOption" example="tax_jar">Calculator type used in computation.</param>
+        /// <param name="zip" example="05495-2086">Postal code for given location (5-Digit ZIP or ZIP+4).</param>
+        /// <param name="country" example="US">Two-letter ISO country code for given location.</param>
+        /// <param name="state" example="VT">Two-letter ISO state code for given location.</param>
+        /// <param name="city" example="Williston">Williston</param>
+        /// <param name="street" example="312 Hurricane Lane">Street address for given location.</param>
         /// <returns></returns>
         [HttpGet("calc-option/{calcOption}/tax-rate/{zip}")]
         public async Task<IActionResult> GetTaxRate([FromRoute] string calcOption, [FromRoute] string zip, [FromQuery] string? country, [FromQuery] string? state, [FromQuery] string? city, [FromQuery] string? street)
