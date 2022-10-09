@@ -26,6 +26,7 @@ using TaxCalculation.Versioning;
 using TaxCalculation.Middlewares;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
+using TaxCalculation.Utilities;
 
 namespace TaxCalculation
 {
@@ -64,7 +65,7 @@ namespace TaxCalculation
                     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                     options.IncludeXmlComments(xmlPath);
-                 //   options.ExampleFilters(); // for Swagger documentation default value example - REQUEST
+                    options.ExampleFilters(); // for Swagger documentation default value example - REQUEST
 
                     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                     {
@@ -92,7 +93,7 @@ namespace TaxCalculation
                 });
 
             services.AddSwaggerGenNewtonsoftSupport();
-            //services.AddSwaggerExamplesFromAssemblyOf<SwaggerRequestExampleValue>(); // for Swagger documentation default value example - REQUEST
+            services.AddSwaggerExamplesFromAssemblyOf<SwaggerRequestExampleValue>(); // for Swagger documentation default value example - REQUEST
             #endregion
 
             //Get API Connection Details in environment variables and store it in static variable
